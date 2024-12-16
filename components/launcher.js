@@ -5,7 +5,7 @@ const fs = require('fs')
 const EventEmitter = require('events').EventEmitter
 
 class MCLCore extends EventEmitter {
-  async launch (options) {
+  async prepareMinecraft (options) {
     try {
       this.options = { ...options }
       this.options.root = path.resolve(this.options.root)
@@ -127,10 +127,20 @@ class MCLCore extends EventEmitter {
       this.emit('arguments', launchArguments)
       this.emit('debug', `[MCLC]: Launching with arguments ${launchArguments.join(' ')}`)
 
-      return this.startMinecraft(launchArguments)
+      return launchArguments
     } catch (e) {
-      this.emit('debug', `[MCLC]: Failed to start due to ${e}, closing...`)
+      this.emit('debug', `[MCLC]: Failed to prepare due to ${e}.`)
       return null
+    }
+  }
+
+  async launch (options) {
+    try {
+      const launcharguments = await this.prepareMinecraft(options)
+      if (!launcharguments) return null
+      return this.startMinecraft(launcharguments)
+    } catch (e) {
+      this.emit('debug', `[MCLC]: Failed to launch due to ${e}.`)
     }
   }
 

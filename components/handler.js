@@ -54,7 +54,7 @@ class Handler {
 
       _request.on('error', async (error) => {
         this.client.emit('debug', `[MCLC]: Failed to download asset to ${path.join(directory, name)} due to\n${error}.` +
-                    ` Retrying... ${retry}`)
+          ` Retrying... ${retry}`)
         if (retry) await this.downloadAsync(url, directory, name, false, type)
         resolve()
       })
@@ -82,7 +82,7 @@ class Handler {
 
       file.on('error', async (e) => {
         this.client.emit('debug', `[MCLC]: Failed to download asset to ${path.join(directory, name)} due to\n${e}.` +
-                    ` Retrying... ${retry}`)
+          ` Retrying... ${retry}`)
         if (fs.existsSync(path.join(directory, name))) fs.unlinkSync(path.join(directory, name))
         if (retry) await this.downloadAsync(url, directory, name, false, type)
         resolve()
@@ -530,14 +530,11 @@ class Handler {
     }
 
     const parsed = this.version.libraries.map(lib => {
-      if (lib.downloads && lib.downloads.artifact && !this.parseRule(lib)) return lib
+      if (lib.downloads && lib.downloads.artifact && !this.parseRule(lib) && !classJson.libraries.some(l => l.name.split(':')[0] === lib.name.split(':')[0])) return lib
     })
 
     libs = libs.concat((await this.downloadToDirectory(libraryDirectory, parsed, 'classes')))
     counter = 0
-
-    // Temp Quilt support
-    if (classJson) libs.sort()
 
     this.client.emit('debug', '[MCLC]: Collected class paths')
     return libs

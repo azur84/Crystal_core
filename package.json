@@ -1,5 +1,5 @@
 {
-  "name": "chrystal_core",
+  "name": "crystal",
   "displayName": "Chrystal",
   "version": "3.18.1",
   "description": "A fork of Pierce's minecraft-launcher-core for Fractalium.",
@@ -28,7 +28,7 @@
     "url": "git+https://github.com/azur84/Crystal_core.git"
   },
   "author": "Azur84 ",
-  "license": "The Unlicense",
+  "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/azur84/Crystal_core/issues"
   },

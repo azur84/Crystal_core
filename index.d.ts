@@ -1,6 +1,6 @@
 /// <reference types="node" />
 
-declare module "minecraft-launcher-core" {
+declare module "crystal" {
   type OS = "windows" | "osx" | "linux";
 
   interface IOverrides {
@@ -296,12 +296,13 @@ declare module "minecraft-launcher-core" {
 
   export class Client extends EventEmitter {
     launch(options: ILauncherOptions): Promise<ChildProcessWithoutNullStreams | null>;
-    protected printVersion(): void;
-    protected createRootDirectory(): void;
-    protected createGameDirectory(): void;
-    protected extractPackage(): Promise<void>;
-    protected getModifyJson(): Promise<any>;
-    protected startMinecraft(launchArguments: string[]): ChildProcessWithoutNullStreams;
+    printVersion(): void;
+    createRootDirectory(): void;
+    createGameDirectory(): void;
+    extractPackage(): Promise<void>;
+    getModifyJson(): Promise<any>;
+    startMinecraft(launchArguments: string[]): ChildProcessWithoutNullStreams;
+    prepareMinecraft():Promise<string[]>
   }
 
   export const Authenticator: IAuthenticator;

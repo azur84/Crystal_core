@@ -104,7 +104,7 @@ class Handler {
 
   getVersion () {
     return new Promise(resolve => {
-      const versionJsonPath = this.options.overrides.versionJson || path.join(this.options.directory, `${this.options.version.number}.json`)
+      const versionJsonPath = this.options.overrides.versionJson || path.join(this.options.directory, `${this.options.version.custom || this.options.version.number}.json`)
       if (fs.existsSync(versionJsonPath)) {
         this.version = JSON.parse(fs.readFileSync(versionJsonPath))
         return resolve(this.version)
@@ -132,8 +132,9 @@ class Handler {
           request.get(desiredVersion.url, (error, response, body) => {
             if (error && error.code !== 'ENOTFOUND') throw Error(error)
             if (!error) {
-              fs.writeFile(path.join(`${cache}/${this.options.version.number}.json`), body, (err) => {
+              fs.writeFile(path.join(`${cache}/${this.options.version.custom || this.options.version.number}.json`), body, (err) => {
                 if (err) throw Error(err)
+                // TODO
                 this.client.emit('debug', `[MCLC]: Cached ${this.options.version.number}.json`)
               })
             }

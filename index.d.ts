@@ -302,7 +302,7 @@ declare module "crystal" {
     extractPackage(): Promise<void>;
     getModifyJson(): Promise<any>;
     startMinecraft(launchArguments: string[]): ChildProcessWithoutNullStreams;
-    prepareMinecraft():Promise<string[]>
+    prepareMinecraft(options: ILauncherOptions): Promise<string[] | null>
   }
 
   export const Authenticator: IAuthenticator;

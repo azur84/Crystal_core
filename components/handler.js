@@ -119,7 +119,7 @@ class Handler {
             fs.mkdirSync(cache, { recursive: true })
             this.client.emit('debug', '[MCLC]: Cache directory created.')
           }
-          fs.writeFile(path.join(`${cache}/version_manifest.json`), body, (err) => {
+          fs.writeFile(path.join(cache, 'version_manifest.json'), body, (err) => {
             if (err) return resolve(err)
             this.client.emit('debug', '[MCLC]: Cached version_manifest.json')
           })
@@ -132,7 +132,7 @@ class Handler {
           request.get(desiredVersion.url, (error, response, body) => {
             if (error && error.code !== 'ENOTFOUND') throw Error(error)
             if (!error) {
-              fs.writeFile(path.join(`${cache}/${this.options.version.custom || this.options.version.number}.json`), body, (err) => {
+              fs.writeFile(path.join(cache, `${this.options.version.number}.json`), body, (err) => {
                 if (err) throw Error(err)
                 // TODO
                 this.client.emit('debug', `[MCLC]: Cached ${this.options.version.number}.json`)
@@ -154,7 +154,8 @@ class Handler {
 
   async getJar () {
     await this.downloadAsync(this.version.downloads.client.url, this.options.directory, `${this.options.version.custom ? this.options.version.custom : this.options.version.number}.jar`, true, 'version-jar')
-    fs.writeFileSync(path.join(this.options.directory, `${this.options.version.number}.json`), JSON.stringify(this.version, null, 4))
+    const versionJsonPath = path.join(this.options.directory, `${this.options.version.custom || this.options.version.number}.json`)
+    if (!fs.existsSync(versionJsonPath)) fs.writeFileSync(versionJsonPath, JSON.stringify(this.version, null, 4))
     return this.client.emit('debug', '[MCLC]: Downloaded version jar and wrote version json')
   }
 

@@ -294,7 +294,96 @@ declare module "crystal" {
   import { EventEmitter } from 'events'
   import { ChildProcessWithoutNullStreams } from 'child_process'
 
-  export class Client extends EventEmitter {
+  interface DownloadStatus {
+    name: string
+    type: string
+    current: number
+    total: number
+  }
+
+  interface ProgressInfo {
+    type: string
+    task: number
+    total: number
+  }
+
+  interface IClientEvents {
+    arguments: string[];
+    data: string;
+    close: number;
+    "package-extract": null;
+    download: string;
+    "download-status": DownloadStatus;
+    debug: string;
+    progress: ProgressInfo;
+  }
+
+  export class Client extends EventEmitter<IClientEvents> {
+    declare on(event: 'arguments', listener: (args: string[]) => void): this;
+    declare on(event: 'data', listener: (data: string) => void): this;
+    declare on(event: 'close', listener: (code: number) => void): this;
+    declare on(event: 'package-extract', listener: () => void): this;
+    declare on(event: 'download', listener: (url: string) => void): this;
+    declare on(event: 'download-status', listener: (status: DownloadStatus) => void): this;
+    declare on(event: 'debug', listener: (message: string) => void): this;
+    declare on(event: 'progress', listener: (info: ProgressInfo) => void): this;
+
+    declare addListener(event: 'arguments', listener: (args: string[]) => void): this;
+    declare addListener(event: 'data', listener: (data: string) => void): this;
+    declare addListener(event: 'close', listener: (code: number) => void): this;
+    declare addListener(event: 'package-extract', listener: () => void): this;
+    declare addListener(event: 'download', listener: (url: string) => void): this;
+    declare addListener(event: 'download-status', listener: (status: DownloadStatus) => void): this;
+    declare addListener(event: 'debug', listener: (message: string) => void): this;
+    declare addListener(event: 'progress', listener: (info: ProgressInfo) => void): this;
+
+    declare once(event: 'arguments', listener: (args: string[]) => void): this;
+    declare once(event: 'data', listener: (data: string) => void): this;
+    declare once(event: 'close', listener: (code: number) => void): this;
+    declare once(event: 'package-extract', listener: () => void): this;
+    declare once(event: 'download', listener: (url: string) => void): this;
+    declare once(event: 'download-status', listener: (status: DownloadStatus) => void): this;
+    declare once(event: 'debug', listener: (message: string) => void): this;
+    declare once(event: 'progress', listener: (info: ProgressInfo) => void): this;
+
+    declare off(event: 'arguments', listener: (args: string[]) => void): this;
+    declare off(event: 'data', listener: (data: string) => void): this;
+    declare off(event: 'close', listener: (code: number) => void): this;
+    declare off(event: 'package-extract', listener: () => void): this;
+    declare off(event: 'download', listener: (url: string) => void): this;
+    declare off(event: 'download-status', listener: (status: DownloadStatus) => void): this;
+    declare off(event: 'debug', listener: (message: string) => void): this;
+    declare off(event: 'progress', listener: (info: ProgressInfo) => void): this;
+
+    declare removeListener(event: 'arguments', listener: (args: string[]) => void): this;
+    declare removeListener(event: 'data', listener: (data: string) => void): this;
+    declare removeListener(event: 'close', listener: (code: number) => void): this;
+    declare removeListener(event: 'package-extract', listener: () => void): this;
+    declare removeListener(event: 'download', listener: (url: string) => void): this;
+    declare removeListener(event: 'download-status', listener: (status: DownloadStatus) => void): this;
+    declare removeListener(event: 'debug', listener: (message: string) => void): this;
+    declare removeListener(event: 'progress', listener: (info: ProgressInfo) => void): this;
+
+    declare prependListener(event: 'arguments', listener: (args: string[]) => void): this;
+    declare prependListener(event: 'data', listener: (data: string) => void): this;
+    declare prependListener(event: 'close', listener: (code: number) => void): this;
+    declare prependListener(event: 'package-extract', listener: () => void): this;
+    declare prependListener(event: 'download', listener: (url: string) => void): this;
+    declare prependListener(event: 'download-status', listener: (status: DownloadStatus) => void): this;
+    declare prependListener(event: 'debug', listener: (message: string) => void): this;
+    declare prependListener(event: 'progress', listener: (info: ProgressInfo) => void): this;
+
+    declare prependOnceListener(event: 'arguments', listener: (args: string[]) => void): this;
+    declare prependOnceListener(event: 'data', listener: (data: string) => void): this;
+    declare prependOnceListener(event: 'close', listener: (code: number) => void): this;
+    declare prependOnceListener(event: 'package-extract', listener: () => void): this;
+    declare prependOnceListener(event: 'download', listener: (url: string) => void): this;
+    declare prependOnceListener(event: 'download-status', listener: (status: DownloadStatus) => void): this;
+    declare prependOnceListener(event: 'debug', listener: (message: string) => void): this;
+    declare prependOnceListener(event: 'progress', listener: (info: ProgressInfo) => void): this;
+
+    declare removeAllListeners(event?: 'arguments' | 'data' | 'close' | 'package-extract' | 'download' | 'download-status' | 'debug' | 'progress'): this;
+
     launch(options: ILauncherOptions): Promise<ChildProcessWithoutNullStreams | null>;
     printVersion(): void;
     createRootDirectory(): void;
@@ -302,7 +391,7 @@ declare module "crystal" {
     extractPackage(): Promise<void>;
     getModifyJson(): Promise<any>;
     startMinecraft(launchArguments: string[]): ChildProcessWithoutNullStreams;
-    prepareMinecraft(options: ILauncherOptions): Promise<string[] | null>
+    prepareMinecraft(options: ILauncherOptions): Promise<string[] | null>;
   }
 
   export const Authenticator: IAuthenticator;
